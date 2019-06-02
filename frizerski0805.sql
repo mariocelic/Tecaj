@@ -1,11 +1,11 @@
 drop database if exists frizerski;
-create database frizerski;
+create database frizerski default character set utf8;
 use frizerski;
 
 create table djelatnica(
 sifra int not null primary key auto_increment,
 osoba int not null,
-iban int not null
+iban char(34) not null
 );
 
 create table osoba(
@@ -20,20 +20,24 @@ osoba int not null
 );
 
 create table dogadjaj(
-sifra int not null,
-djelatnica
-usluga
-korisnik
-vrijemedogovora
+sifra int not null primary key auto_increment,
+djelatnica int not null,
+usluga int not null,
+korisnik int not null,
+vrijemedogovora datetime
 );
 
 create table usluga(
-sifra
-naziv
-opis
-cijena
+sifra int not null primary key auto_increment,
+naziv varchar(50) not null,
+opis text,
+cijena decimal(18,2) not null
 );
 
+alter table djelatnica add foreign key (osoba) references osoba(sifra);
 
-alter table zaposlenik add foreign key (odjel) references odjel(sifra);
-alter table zaposlenik add foreign key (odjel) references zaposlenik(sifra);
+alter table korisnik add foreign key (osoba) references osoba(sifra);
+
+alter table dogadjaj add foreign key (djelatnica) references djelatnica(sifra);
+alter table dogadjaj add foreign key (usluga) references usluga(sifra);
+alter table dogadjaj add foreign key (korisnik) references korisnik(sifra);
